@@ -13,13 +13,17 @@ public class ParkingLot {
             return 0;
         }
 
-        double days = 0;
-        while (timeElapsed > 7.5) {
-            days++;
-            timeElapsed -= 24;
-        }
         timeElapsed = Math.round(ticket.getTimeOut() - ticket.getTimeIn());
 
-        return ((15.0 * days) + (2.0 * (timeElapsed % 24)));
+        double days = Math.floor(timeElapsed/24);
+        double hours = timeElapsed % 24;
+
+        double dayFee = days*15;
+        double hourFee = 2*hours;
+        if (hourFee > 15) {
+            hourFee = 15;
+        }
+
+        return dayFee + hourFee;
     }
 }
