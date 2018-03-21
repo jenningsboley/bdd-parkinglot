@@ -10,7 +10,8 @@ import org.junit.runner.RunWith;
  *
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "/Users/n0204148/Dev/tdd/src/test/java/CalculateFeeWhenTicketIsProcessed.feature")
+@CucumberOptions(features = {"/Users/n0204148/Dev/tdd/src/test/java/CalculateFeeWhenTicketIsProcessed.feature",
+                    "/Users/n0204148/Dev/tdd/src/test/java/PrintTicketInformation.feature"})
 public final class RunCukesTest {
 
 

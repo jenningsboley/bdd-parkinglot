@@ -4,6 +4,7 @@ public class Ticket {
     private double timeIn;
     private double timeOut;
     private String ticketLost;
+    private String paymentMethod;
 
     public void setCarId(String carId) {
         this.carId = carId;
@@ -11,6 +12,10 @@ public class Ticket {
 
     public void setTicketLost(String ticketLost) {
         this.ticketLost = ticketLost;
+    }
+
+    public String getCarId() {
+        return carId;
     }
 
     public String getTicketLost() {
@@ -31,5 +36,13 @@ public class Ticket {
 
     public void setTimeOut(double timeOut) {
         this.timeOut = timeOut;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

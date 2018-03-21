@@ -1,9 +1,46 @@
 public class ParkingLot {
 
+    public ParkingLot (ICreditCardService ccs) {
+        this.ccs = ccs;
+    }
+
     static double totalRevenue = 0;
+    private Receipt receipt;
+    private ICreditCardService ccs;
+
+    public Receipt getReceipt() {
+        return receipt;
+    }
 
     public double processTicket(Ticket ticket) {
 
+        // calculate fee
+        double result = calculateFee(ticket);
+
+        // pay
+        if ("CreditCard".equals(ticket.getPaymentMethod())
+                && "processed".equals(ccs.processCard())) {
+
+            result *= 0.975;
+        }
+
+        // generate receipt
+        receipt = new Receipt(
+                ticket.getCarId(),
+                (ticket.getTimeOut() - ticket.getTimeIn()),
+                ticket.getTicketLost(),
+                result);
+
+        receipt.print();
+
+        // reporting
+        totalRevenue += result;
+        System.out.println("Total Revenue: " + totalRevenue);
+
+        return result;
+    }
+
+    private double calculateFee (Ticket ticket) {
         double result;
 
         // round time to nearest hour
@@ -18,7 +55,7 @@ public class ParkingLot {
             if (hours >= 24 * 7) {
                 weeks++;
                 hours -= (24 * 7);
-            // Day checker
+                // Day checker
             } else if (hours >= 24) {
                 days++;
                 hours -= 24;
@@ -31,13 +68,15 @@ public class ParkingLot {
         double weekFee = 90 * weeks;
 
         // enforce that max daily fee is $15
-        if (hourFee > 15) {
-            hourFee = 15;
+        if (hourFee >= 15) {
+            dayFee += 15;
+            hourFee = 0;
         }
 
         // enforce that max weekly fee is $90
         if (dayFee >= 90) {
-            dayFee = 90;
+            weekFee += 90;
+            dayFee = 0;
             hourFee = 0;
         }
 
@@ -49,8 +88,6 @@ public class ParkingLot {
             result = 75;
         }
 
-        totalRevenue += result;
-        System.out.println(totalRevenue);
         return result;
     }
 }
