@@ -1,29 +1,56 @@
 public class ParkingLot {
 
+    static double totalRevenue = 0;
+
     public double processTicket(Ticket ticket) {
-        double timeElapsed = ticket.getTimeOut() - ticket.getTimeIn();
 
-        // Scenario: Ticket is lost
-        if ("true".equals(ticket.getTicketLost()))
-        {
-            return 75;
+        double result;
 
-        // Scenario: Ticket is processed in under 30 minutes
-        } else if (timeElapsed <= 0.5) {
-            return 0;
+        // round time to nearest hour
+        double hours = Math.round(ticket.getTimeOut() - ticket.getTimeIn());
+
+        double weeks = 0;
+        double days = 0;
+
+        // pull out whole weeks and days
+        while (hours >= 24) {
+            // Weeks checker
+            if (hours >= 24 * 7) {
+                weeks++;
+                hours -= (24 * 7);
+            // Day checker
+            } else if (hours >= 24) {
+                days++;
+                hours -= 24;
+            }
         }
 
-        timeElapsed = Math.round(ticket.getTimeOut() - ticket.getTimeIn());
+        // set fees for whole units of time
+        double dayFee = 15 * days;
+        double hourFee = 2 * hours;
+        double weekFee = 90 * weeks;
 
-        double days = Math.floor(timeElapsed/24);
-        double hours = timeElapsed % 24;
-
-        double dayFee = days*15;
-        double hourFee = 2*hours;
+        // enforce that max daily fee is $15
         if (hourFee > 15) {
             hourFee = 15;
         }
 
-        return dayFee + hourFee;
+        // enforce that max weekly fee is $90
+        if (dayFee >= 90) {
+            dayFee = 90;
+            hourFee = 0;
+        }
+
+        // add all fees
+        result = weekFee + dayFee + hourFee;
+
+        // Scenario: Ticket is lost
+        if ("true".equals(ticket.getTicketLost())) {
+            result = 75;
+        }
+
+        totalRevenue += result;
+        System.out.println(totalRevenue);
+        return result;
     }
 }
